@@ -1,4 +1,4 @@
-# ReproRepo – Agentic Reproduction Harness
+# ReproRepo – Agentic Reproduction
 
 ReproRepo wraps a deterministic *white* agent (code generator) and a supervising *green* agent (evaluator) so we can rehearse reproducibility flows with miniature research repos. Each experiment ships as a stubbed repo under `assets/experiments/<id>`, plus an expected artifact and one or more canned submissions. The green agent provisions a workspace, applies the white agent’s files, runs the declared commands, inspects the artifacts, scores them with an LLM, and logs the outcome.
 
