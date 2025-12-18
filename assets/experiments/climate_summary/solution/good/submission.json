@@ -1,0 +1,10 @@
+{
+  "id": "climate_summary",
+  "files": [
+    {"path": "run_pipeline.py", "source": "run_pipeline.py"}
+  ],
+  "commands": [
+    ["python", "run_pipeline.py"]
+  ],
+  "notes": "Aggregates per-station summaries and prints the headline metrics"
+}

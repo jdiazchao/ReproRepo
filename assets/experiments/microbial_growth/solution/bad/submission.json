@@ -1,0 +1,11 @@
+{
+  "id": "microbial_growth",
+  "variant": "bad",
+  "files": [
+    {"path": "run_analysis.py", "source": "run_analysis.py"}
+  ],
+  "commands": [
+    ["python", "run_analysis.py"]
+  ],
+  "notes": "Uses a linear OD model and omits doubling time metrics."
+}

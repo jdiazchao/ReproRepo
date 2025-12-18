@@ -1,0 +1,11 @@
+{
+  "id": "climate_summary",
+  "variant": "bad",
+  "files": [
+    {"path": "run_pipeline.py", "source": "run_pipeline.py"}
+  ],
+  "commands": [
+    ["python", "run_pipeline.py"]
+  ],
+  "notes": "Simplistic averages without weighting; meant to trigger evaluator alarms."
+}

@@ -16,3 +16,12 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Runtime artifacts
+logs/
+.tmp/
+assets/experiments/*/workspace/artifacts/
+assets/experiments/*/solution/*/__pycache__/
+
+# OS cruft
+.DS_Store

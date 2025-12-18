@@ -1,0 +1,10 @@
+{
+  "id": "linear_regression",
+  "files": [
+    {"path": "run_experiment.py", "source": "run_experiment.py"}
+  ],
+  "commands": [
+    ["python", "run_experiment.py"]
+  ],
+  "notes": "Rebuilds the missing training script and logs metrics to artifacts/metrics.json"
+}

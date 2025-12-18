@@ -1,0 +1,11 @@
+{
+  "id": "microbial_growth",
+  "variant": "good",
+  "files": [
+    {"path": "run_analysis.py", "source": "run_analysis.py"}
+  ],
+  "commands": [
+    ["python", "run_analysis.py"]
+  ],
+  "notes": "Reimplements the log-linear fit with doubling-time reporting."
+}

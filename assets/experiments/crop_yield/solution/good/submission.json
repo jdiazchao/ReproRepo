@@ -1,0 +1,11 @@
+{
+  "id": "crop_yield",
+  "variant": "good",
+  "files": [
+    {"path": "run_analysis.py", "source": "run_analysis.py"}
+  ],
+  "commands": [
+    ["python", "run_analysis.py"]
+  ],
+  "notes": "Restores the data pipeline with weighted stats and a JSON artifact."
+}

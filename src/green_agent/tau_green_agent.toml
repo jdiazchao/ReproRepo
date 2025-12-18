@@ -1,6 +1,6 @@
 name = "tau_green_agent"
-description = "The assessment hosting agent for tau-bench."
-version = "0.1.0"
+description = "Green agent that evaluates code reproducibility for toy research repos."
+version = "0.2.0"
 
 defaultInputModes = ["text"]
 defaultOutputModes = ["text"]
@@ -8,28 +8,24 @@ defaultOutputModes = ["text"]
 streaming = false
 
 [[skills]]
-id = "host_assess_tau_bench"
-name = "Tau-bench assessment hosting"
+id = "reproduction_assessment"
+name = "Reproduction task orchestration"
 description = """
-Assess the tool-calling ability of an agent.
+Coordinate toy research repos, send them to a white agent, run submitted code, and score the results.
 """
-tags = ["green agent", "assessment hosting", "tau-bench"]
-examples = ["""    
-Your task is to instantiate tau-bench to test the agent located at:
+tags = ["green agent", "assessment hosting", "reproduction"]
+examples = ["""
+Please run the reproducibility benchmark against this white agent:
 <white_agent_url>
 http://localhost:9002/
 </white_agent_url>
-You should use the following env configuration:
-<env_config>
+Target experiments:
+<evaluation_plan>
 {
-  "env": "retail",
-  "user_strategy": "llm",
-  "user_model": "openai/gpt-4o",
-  "user_provider": "openai",
-  "task_split": "test",
-  "task_ids": [
-    1
+  "experiments": [
+    "linear_regression",
+    "climate_summary"
   ]
 }
-</env_config>
-    """]
+</evaluation_plan>
+"""]

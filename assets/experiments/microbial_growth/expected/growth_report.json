@@ -1,0 +1,27 @@
+{
+  "strains": {
+    "delta": {
+      "growth_rate": 0.2307,
+      "intercept": -2.5571,
+      "doubling_time": 3.0044,
+      "r2": 0.9988
+    },
+    "gamma": {
+      "growth_rate": 0.1606,
+      "intercept": -2.6404,
+      "doubling_time": 4.3158,
+      "r2": 0.9969
+    },
+    "kappa": {
+      "growth_rate": 0.0986,
+      "intercept": -2.4138,
+      "doubling_time": 7.0309,
+      "r2": 0.9977
+    }
+  },
+  "global": {
+    "fastest_strain": "delta",
+    "mean_doubling_time": 4.7837,
+    "mean_r2": 0.9978
+  }
+}

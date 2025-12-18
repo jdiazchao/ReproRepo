@@ -1,0 +1,7 @@
+[
+  {"station": "nyc", "temp_c": 23.5, "humidity": 0.45, "samples": 120},
+  {"station": "nyc", "temp_c": 24.0, "humidity": 0.48, "samples": 80},
+  {"station": "sfo", "temp_c": 18.2, "humidity": 0.62, "samples": 140},
+  {"station": "sfo", "temp_c": 19.0, "humidity": 0.58, "samples": 110},
+  {"station": "ber", "temp_c": 16.4, "humidity": 0.71, "samples": 160}
+]

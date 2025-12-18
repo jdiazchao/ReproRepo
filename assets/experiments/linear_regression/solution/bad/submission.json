@@ -1,0 +1,11 @@
+{
+  "id": "linear_regression",
+  "variant": "bad",
+  "files": [
+    {"path": "run_experiment.py", "source": "run_experiment.py"}
+  ],
+  "commands": [
+    ["python", "run_experiment.py"]
+  ],
+  "notes": "Naive baseline that forces the regression through the origin."
+}

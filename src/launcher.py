@@ -1,10 +1,33 @@
-"""Launcher module - initiates and coordinates the evaluation process."""
-
 import multiprocessing
 import json
+import os
+from typing import Sequence
+
 from src.green_agent.agent import start_green_agent
 from src.white_agent.agent import start_white_agent
 from src.my_util import my_a2a
+from src.reproduction import list_experiments
+
+
+def _build_evaluation_plan(experiments: Sequence[str] | None = None) -> dict:
+    experiment_ids: Sequence[str]
+    if experiments:
+        experiment_ids = experiments
+    else:
+        raw = os.getenv("EVALUATION_EXPERIMENTS")
+        if raw:
+            experiment_ids = [
+                exp.strip() for exp in raw.split(",") if exp.strip()
+            ]
+        else:
+            experiment_ids = list_experiments()
+    if not experiment_ids:
+        raise ValueError("No experiments are registered")
+    plan = {"experiments": list(experiment_ids)}
+    variant = os.getenv("SOLUTION_VARIANT")
+    if variant:
+        plan["solution_variant"] = variant.strip()
+    return plan
 
 
 async def launch_evaluation():
@@ -30,42 +53,24 @@ async def launch_evaluation():
     assert await my_a2a.wait_agent_ready(white_url), "White agent not ready in time"
     print("White agent is ready.")
 
-    # send the task description
     print("Sending task description to green agent...")
-    # task_config = {
-    #     "env": "retail",
-    #     "user_strategy": "llm",
-    #     "user_model": "openai/gpt-4o",
-    #     "user_provider": "openai",
-    #     "task_split": "test",
-    #     "task_ids": [1],
-    # }
-    task_config = {
-        "env": "retail",
-        "user_strategy": "llm",
-        "user_model": "openrouter/openai/gpt-4o",
-        "user_provider": "litellm_proxy",
-        "task_split": "test",
-        "task_ids": [1],
-    }
+    evaluation_plan = _build_evaluation_plan()
     task_text = f"""
-Your task is to instantiate tau-bench to test the agent located at:
+Run the reproduction benchmark against the target agent located at:
 <white_agent_url>
 http://{white_address[0]}:{white_address[1]}/
 </white_agent_url>
-You should use the following env configuration:
-<env_config>
-{json.dumps(task_config, indent=2)}
-</env_config>
+Use the following plan:
+<evaluation_plan>
+{json.dumps(evaluation_plan, indent=2)}
+</evaluation_plan>
     """
     print("Task description:")
     print(task_text)
     print("Sending...")
     response = await my_a2a.send_message(green_url, task_text)
-    print("Response from green agent:")
-    print(response)
 
-    print("Evaluation complete. Terminating agents...")
+    print("Done. Terminating agents...")
     p_green.terminate()
     p_green.join()
     p_white.terminate()
@@ -74,25 +79,16 @@ You should use the following env configuration:
 
 
 async def launch_remote_evaluation(green_url: str, white_url: str):
-    task_config = {
-        "env": "retail",
-        "user_strategy": "llm",
-        "user_model": "openrouter/openai/gpt-4o",
-        "user_provider": "litellm_proxy",
-        "task_split": "test",
-        "task_ids": [1],
-    }
+    evaluation_plan = _build_evaluation_plan()
     task_text = f"""
-Your task is to instantiate tau-bench to test the agent located at:
+Run the reproduction benchmark against the target agent located at:
 <white_agent_url>
 {white_url}
 </white_agent_url>
-You should use the following env configuration:
-<env_config>
-{json.dumps(task_config, indent=2)}
-</env_config>
+Use the following plan:
+<evaluation_plan>
+{json.dumps(evaluation_plan, indent=2)}
+</evaluation_plan>
     """
     print("Sending task description to green agent...")
     response = await my_a2a.send_message(green_url, task_text)
-    print("Response from green agent:")
-    print(response)

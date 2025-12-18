@@ -1,6 +1,7 @@
 import httpx
 import asyncio
 import uuid
+import os
 
 
 from a2a.client import A2ACardResolver, A2AClient
@@ -48,7 +49,8 @@ async def send_message(
     url, message, task_id=None, context_id=None
 ) -> SendMessageResponse:
     card = await get_agent_card(url)
-    httpx_client = httpx.AsyncClient(timeout=120.0)
+    timeout = float(os.getenv("A2A_CLIENT_TIMEOUT", "300"))
+    httpx_client = httpx.AsyncClient(timeout=timeout)
     client = A2AClient(httpx_client=httpx_client, agent_card=card)
 
     message_id = uuid.uuid4().hex

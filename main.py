@@ -8,7 +8,6 @@ from src.white_agent import start_white_agent
 from src.launcher import launch_evaluation, launch_remote_evaluation
 from pydantic_settings import BaseSettings
 
-
 class TaubenchSettings(BaseSettings):
     role: str = "unspecified"
     host: str = "127.0.0.1"

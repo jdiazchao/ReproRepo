@@ -1,0 +1,30 @@
+{
+  "nyc": {
+    "mean_temp_c": 23.7,
+    "temp_std": 0.24,
+    "mean_humidity": 0.46,
+    "humidity_std": 0.01,
+    "total_samples": 200
+  },
+  "sfo": {
+    "mean_temp_c": 18.55,
+    "temp_std": 0.4,
+    "mean_humidity": 0.6,
+    "humidity_std": 0.02,
+    "total_samples": 250
+  },
+  "ber": {
+    "mean_temp_c": 16.4,
+    "temp_std": 0.0,
+    "mean_humidity": 0.71,
+    "humidity_std": 0.0,
+    "total_samples": 160
+  },
+  "overall": {
+    "mean_temp_c": 19.68,
+    "temp_std": 2.95,
+    "mean_humidity": 0.58,
+    "humidity_std": 0.1,
+    "total_samples": 610
+  }
+}

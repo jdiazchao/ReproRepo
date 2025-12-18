@@ -1,0 +1,29 @@
+{
+  "regions": {
+    "andes": {
+      "mean_yield": 3.646,
+      "yield_std": 0.206,
+      "rainfall_corr": -0.954,
+      "total_area": 390
+    },
+    "delta": {
+      "mean_yield": 4.672,
+      "yield_std": 0.123,
+      "rainfall_corr": -0.982,
+      "total_area": 290
+    },
+    "sahel": {
+      "mean_yield": 2.268,
+      "yield_std": 0.126,
+      "rainfall_corr": 0.982,
+      "total_area": 600
+    }
+  },
+  "global": {
+    "mean_yield": 3.233,
+    "total_area": 1280,
+    "best_region": "delta",
+    "rainfall_corr": 0.682,
+    "sample_count": 9
+  }
+}
