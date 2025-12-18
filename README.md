@@ -1,66 +1,63 @@
-# Agentify Example: Reproduction Benchmark
+# ReproRepo – Agentic Reproduction Harness
 
-This repo hosts a pair of agents wired together through the A2A protocol.
-The green agent assembles miniature research repositories, asks the white agent
-for fixes, executes the submitted code, validates the outputs, and emits a short
-code-quality critique. The white agent is a deterministic stub that returns
-prebuilt solutions so we can focus on the evaluation flow.
+ReproRepo wraps a deterministic *white* agent (code generator) and a supervising *green* agent (evaluator) so we can rehearse reproducibility flows with miniature research repos. Each experiment ships as a stubbed repo under `assets/experiments/<id>`, plus an expected artifact and one or more canned submissions. The green agent provisions a workspace, applies the white agent’s files, runs the declared commands, inspects the artifacts, scores them with an LLM, and logs the outcome.
 
-## Project Structure
+## Capabilities
 
-```
-src/
-├── green_agent/    # Assessment manager agent
-├── white_agent/    # Deterministic target agent
-└── launcher.py     # Evaluation coordinator
-assets/
-├── experiments/    # Toy repositories, expected artifacts, solutions
-└── shared_libs/    # Local dependencies injected into experiments
-```
+- Launches local green/white agents (A2A protocol) with `uv run python main.py launch`.
+- Supports “good”, “bad”, or randomized submissions via `WHITE_AGENT_VARIANT` / `SOLUTION_VARIANT`.
+- Streams detailed progress (files, commands, metrics, code-review remarks) to the console and JSON logs under `logs/experiments/`.
+- Automatically issues a correction brief and re-runs an experiment if the first submission fails, so you can demo iterative improvements.
 
-## Installation
+Set `OPENAI_API_KEY` for the LLM scoring to run.
+
+## Install
 
 ```bash
 uv sync
 ```
 
-## Usage
+## Run
 
 ```bash
-# Launch complete evaluation
+# all experiments, default variants
+uv run python main.py launch
+
+# subset with bad variants
+EVALUATION_EXPERIMENTS="linear_regression,climate_summary" \
+SOLUTION_VARIANT=bad \
 uv run python main.py launch
 ```
 
-The green agent now always pushes the command outputs and artifacts through an
-OpenAI LLM to derive an adaptive metric (accuracy, RMSE, etc.). Set
-`OPENAI_API_KEY` in `.env` (optional overrides: `GREEN_SCORE_MODEL`,
-`GREEN_SCORE_PROVIDER`) so the scoring call succeeds. Every experiment is also
-logged under `logs/experiments/<experiment>_<timestamp>.json`, which captures the
-commands, artifacts, LLM verdict, and code-review notes for later inspection.
+Useful environment variables:
 
-## Available Toy Experiments
+- `WHITE_AGENT_VARIANT` – default variant the white agent uses (`good`, `bad`, `random`).
+- `EVALUATION_EXPERIMENTS` – comma-separated experiment IDs to run.
+- `SOLUTION_VARIANT` – optional override baked into the evaluation plan.
+- `A2A_CLIENT_TIMEOUT` – HTTP timeout (seconds) for A2A RPCs.
 
-| ID                | Theme                               | Expected Artifact                 |
-| ----------------- | ----------------------------------- | --------------------------------- |
-| `linear_regression` | Recover the missing regression script | `artifacts/metrics.json`          |
-| `climate_summary` | Weighted climate aggregation        | `artifacts/summary.json`          |
-| `crop_yield`      | Area-weighted agronomy pipeline     | `artifacts/yield_report.json`     |
-| `microbial_growth`| Log-linear growth kinetics          | `artifacts/growth_report.json`    |
+## Layout
 
-Each workspace ships with a README plus skeletal script (`run_*.py`) the white
-agent must rebuild.
-
-## White Agent Variants
-
-Every experiment now includes a *good* and *bad* canned submission so the green
-agent can exercise both success and failure paths. Choose which variant the
-white agent emits by setting `WHITE_AGENT_VARIANT` before launching:
-
-```bash
-export WHITE_AGENT_VARIANT=good   # other options: bad, random
-uv run python main.py launch
+```
+src/
+├── green_agent/        green-agent runtime + logging
+├── white_agent/        deterministic white agent + canned submissions
+├── reproduction/       workspace helpers, scoring, logging
+└── launcher.py         spins up both agents and fires the plan
+assets/
+├── experiments/<id>/   toy repos (workspace, expected artifacts, solutions)
+└── shared_libs/        packages injected into PYTHONPATH
+logs/                   JSON transcripts (ignored by git)
+.tmp/                   ephemeral workspaces (ignored by git)
 ```
 
-You can also set `WHITE_AGENT_VARIANT=random` to let each request sample a
-variant randomly. The green agent request payload supports an optional
-`solution_variant` field for finer control during integration tests.
+## Experiments
+
+| ID | Goal | Artifact |
+| --- | --- | --- |
+| `linear_regression` | rebuild missing regression trainer | `artifacts/metrics.json` |
+| `climate_summary` | weighted per-station climate stats | `artifacts/summary.json` |
+| `crop_yield` | agronomy aggregation + rainfall correlation | `artifacts/yield_report.json` |
+| `microbial_growth` | log-linear growth kinetics | `artifacts/growth_report.json` |
+
+Each workspace contains a README describing the research story, the raw data or scaffolding, and a `run_*.py` skeleton the white agent must complete.
